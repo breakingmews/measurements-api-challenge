@@ -14,6 +14,7 @@ pandas = "*"
 sqlalchemy = "*"
 
 [dev-packages]
+coverage = "*"
 flake8 = "*"
 mypy = "*"
 pre-commit = "*"
@@ -21,7 +22,8 @@ ruff = "*"
 yamllint = "*"
 
 [scripts]
-test = "python -m unittest discover -s test -p *.py -v"
+test = "coverage run -m unittest discover -s test -p *.py -v"
+test-coverage = "coverage report"
 pre-commit-format = "ruff format --check"
 format = "ruff format"
 pre-commit-fix = "ruff check --extend-select I"
