@@ -1,3 +1,4 @@
-import sqlite3
+from dependencies import load_dataset
 
-print("Hello, World!")
+dataset = load_dataset()
+print(dataset)

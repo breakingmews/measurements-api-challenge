@@ -3,10 +3,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[pipenv]
+sort_pipfile = true
+
 [requires]
 python_version = "3.13"
 
 [packages]
+pandas = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 flake8 = "*"
