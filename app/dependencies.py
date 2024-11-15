@@ -1,8 +1,11 @@
+import logging
 from pathlib import Path
 from typing import List
 
 import pandas as pd
 from fastapi import Request
+
+_log = logging.getLogger(__name__)
 
 
 def read_dataset(dataset_dirpath: str) -> List[pd.DataFrame]:
@@ -29,15 +32,15 @@ def prepare_dataset(dataset: List[pd.DataFrame]) -> pd.DataFrame:
 
 
 async def load_dataset() -> pd.DataFrame:
-    print("Loading dataset")
+    _log.info("Loading dataset")
     sample_data_dir = "sample-data"
 
     dataset = read_dataset(sample_data_dir)
     dataset = prepare_dataset(dataset)
-    print(f"Loaded dataset with {len(dataset)} records")
+    _log.info(f"Loaded dataset with {len(dataset)} records")
     return dataset
 
 
 def get_dataset(request: Request):
-    print("Returning dataset")
+    _log.info("Returning dataset")
     return request.app.state.dataset
