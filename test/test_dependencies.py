@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from app.dependencies import prepare_dataset
+from app.dependencies.dataset import prepare_dataset
 
 
 class TestCase(unittest.TestCase):

@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import List
 
 import pandas as pd
-from fastapi import Request
 
 _log = logging.getLogger(__name__)
 
@@ -28,10 +27,11 @@ def prepare_dataset(dataset: List[pd.DataFrame]) -> pd.DataFrame:
     }
     ds = ds[list(column_mapping.keys())]
     ds = ds.rename(columns=column_mapping)
+    ds = ds[ds["glucose_value_mgdl"].notna()]
     return ds
 
 
-async def load_dataset() -> pd.DataFrame:
+def load_dataset() -> pd.DataFrame:
     _log.info("Loading dataset")
     sample_data_dir = "sample-data"
 
@@ -39,8 +39,3 @@ async def load_dataset() -> pd.DataFrame:
     dataset = prepare_dataset(dataset)
     _log.info(f"Loaded dataset with {len(dataset)} records")
     return dataset
-
-
-def get_dataset(request: Request):
-    _log.info("Returning dataset")
-    return request.app.state.dataset

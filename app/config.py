@@ -2,6 +2,11 @@ import logging
 
 
 class Settings:
+    db = {
+        "url": "sqlite:///sample-data/sample-data.db",
+        "connect_args": {"check_same_thread": False},
+    }
+
     logging = {
         "encoding": "utf-8",
         "level": logging.DEBUG,
