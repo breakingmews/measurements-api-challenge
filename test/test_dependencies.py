@@ -14,6 +14,10 @@ class TestCase(unittest.TestCase):
                 "Gerätezeitstempel": ["2023-01-01 00:00:00", "2023-01-01 01:00:00"],
                 "Glukosewert-Verlauf mg/dL": [100, 110],
                 "OtherColumn": [1, 2],
+                "user_id": [
+                    "123",
+                    "123",
+                ],
             },
         )
 
@@ -23,6 +27,10 @@ class TestCase(unittest.TestCase):
                 "Gerätezeitstempel": ["2023-01-01 02:00:00", "2023-01-01 03:00:00"],
                 "Glukosewert-Verlauf mg/dL": [120, 130],
                 "OtherColumn": [3, 4],
+                "user_id": [
+                    "123",
+                    "123",
+                ],
             }
         )
 
@@ -42,6 +50,7 @@ class TestCase(unittest.TestCase):
                     "2023-01-01 03:00:00",
                 ],
                 "glucose_value_mgdl": [100, 110, 120, 130],
+                "user_id": ["123", "123", "123", "123"],
             },
             index=[0, 1, 0, 1],
         )

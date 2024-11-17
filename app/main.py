@@ -32,5 +32,4 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/info")
 async def info(dataset_size: int = Depends(get_measurements_count)) -> Info:
-    _log.error(dataset_size)
     return Info(status="running", dataset_size=dataset_size)

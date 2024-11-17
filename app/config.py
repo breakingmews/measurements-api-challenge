@@ -30,7 +30,7 @@ class Settings:
             "console": {
                 "class": "logging.StreamHandler",
                 "formatter": "detailed",
-                "level": "INFO",
+                "level": "DEBUG",
             },
             "file_info": {
                 "class": "logging.FileHandler",
@@ -53,12 +53,12 @@ class Settings:
         },
         "loggers": {
             "": {  # root logger
-                "handlers": ["console", "file_info"],
-                "level": "INFO",
-            },
-            "app.module1": {
                 "handlers": ["console", "file_debug"],
                 "level": "DEBUG",
+            },
+            "uvicorn": {
+                "handlers": ["console", "file_debug"],
+                "level": "INFO",
                 "propagate": False,
             },
             "watchfiles.main": {

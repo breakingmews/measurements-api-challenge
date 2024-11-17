@@ -14,6 +14,7 @@ def read_dataset(dataset_dirpath: str) -> List[pd.DataFrame]:
     for filename in dataset_dir.iterdir():
         if filename.suffix == ".csv":
             data: pd.DataFrame = pd.read_csv(filename, skiprows=1)
+            data["user_id"] = filename.stem
             dataset.append(data)
     return dataset
 
@@ -24,6 +25,7 @@ def prepare_dataset(dataset: List[pd.DataFrame]) -> pd.DataFrame:
         "Seriennummer": "serial_number",
         "Gerätezeitstempel": "device_timestamp",
         "Glukosewert-Verlauf mg/dL": "glucose_value_mgdl",
+        "user_id": "user_id",
     }
     ds = ds[list(column_mapping.keys())]
     ds = ds.rename(columns=column_mapping)
