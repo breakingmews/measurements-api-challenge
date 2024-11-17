@@ -1,6 +1,3 @@
-import logging
-
-
 class Settings:
     db = {
         "url": "sqlite:///sample-data/sample-data.db",
@@ -8,9 +5,68 @@ class Settings:
     }
 
     logging = {
-        "encoding": "utf-8",
-        "level": logging.DEBUG,
-        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "standard": {
+                "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            },
+            "detailed": {
+                "()": "colorlog.ColoredFormatter",
+                "format": "%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                "log_colors": {
+                    "DEBUG": "cyan",
+                    "INFO": "green",
+                    "WARNING": "yellow",
+                    "ERROR": "red",
+                    "CRITICAL": "bold_red",
+                },
+            },
+            "simple": {
+                "format": "%(levelname)s - %(message)s",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "detailed",
+                "level": "INFO",
+            },
+            "file_info": {
+                "class": "logging.FileHandler",
+                "filename": "info.log",
+                "formatter": "standard",
+                "level": "INFO",
+            },
+            "file_debug": {
+                "class": "logging.FileHandler",
+                "filename": "debug.log",
+                "formatter": "detailed",
+                "level": "DEBUG",
+            },
+            "file_error": {
+                "class": "logging.FileHandler",
+                "filename": "error.log",
+                "formatter": "detailed",
+                "level": "ERROR",
+            },
+        },
+        "loggers": {
+            "": {  # root logger
+                "handlers": ["console", "file_info"],
+                "level": "INFO",
+            },
+            "app.module1": {
+                "handlers": ["console", "file_debug"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+            "watchfiles.main": {
+                "handlers": ["console", "file_error"],
+                "level": "ERROR",
+                "propagate": False,
+            },
+        },
     }
 
 

@@ -12,7 +12,7 @@ from .dependencies.database import (
 )
 from .dto import Info
 
-logging.basicConfig(**settings.logging)  # type: ignore[arg-type]
+logging.config.dictConfig(settings.logging)  # type: ignore[arg-type]
 _log = logging.getLogger(__name__)
 
 
