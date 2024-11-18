@@ -34,19 +34,19 @@ class Settings:
             },
             "file_info": {
                 "class": "logging.FileHandler",
-                "filename": "info.log",
+                "filename": "logs/info.log",
                 "formatter": "standard",
                 "level": "INFO",
             },
             "file_debug": {
                 "class": "logging.FileHandler",
-                "filename": "debug.log",
+                "filename": "logs/debug.log",
                 "formatter": "detailed",
                 "level": "DEBUG",
             },
             "file_error": {
                 "class": "logging.FileHandler",
-                "filename": "error.log",
+                "filename": "logs/error.log",
                 "formatter": "detailed",
                 "level": "ERROR",
             },
