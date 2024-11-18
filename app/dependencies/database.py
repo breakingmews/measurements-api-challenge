@@ -1,5 +1,5 @@
 import logging
-from typing import Annotated
+from typing import Annotated, Sequence
 
 import pandas as pd
 from fastapi import Depends
@@ -45,3 +45,14 @@ def import_dataset():
 
 def get_measurements_count(session: SessionDep):
     return session.scalar(select(func.count()).select_from(Measurement)) or 0
+
+
+def get_measurements(
+    user_id: str, offset: int, limit: int, session: SessionDep
+) -> Sequence[Measurement]:
+    return session.exec(
+        select(Measurement)
+        .where(Measurement.user_id == user_id)
+        .offset(offset)
+        .limit(limit)
+    ).all()

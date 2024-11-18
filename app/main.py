@@ -2,15 +2,14 @@ import logging
 import logging.config
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 
 from .config import settings
 from .dependencies.database import (
     create_db_and_tables,
-    get_measurements_count,
     import_dataset,
 )
-from .dto import Info
+from .router import router
 
 logging.config.dictConfig(settings.logging)  # type: ignore[arg-type]
 _log = logging.getLogger(__name__)
@@ -28,8 +27,4 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
-
-@app.get("/info")
-async def info(dataset_size: int = Depends(get_measurements_count)) -> Info:
-    return Info(status="running", dataset_size=dataset_size)
+app.include_router(router)

@@ -3,9 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pandas as pd
 
-from app.dependencies.database import (
-    import_dataset,
-)
+from app.dependencies.database import get_measurements, import_dataset
 
 
 class TestDatabase(unittest.TestCase):
@@ -49,6 +47,24 @@ class TestDatabase(unittest.TestCase):
         mock_load_dataset.assert_not_called()
         mock_session.add.assert_not_called()
         mock_session.commit.assert_not_called()
+
+    @patch("app.dependencies.database.get_session")
+    def test_get_measurements(self, mock_get_session):
+        # arrange
+        mock_session = MagicMock()
+        mock_get_session.return_value = iter([mock_session])
+        user_id = "user123"
+        offset = 0
+        limit = 10
+        mock_measurements = [MagicMock(), MagicMock()]
+        mock_session.exec.return_value.all.return_value = mock_measurements
+
+        # act
+        result = get_measurements(user_id, offset, limit, mock_session)
+
+        # assert
+        mock_session.exec.assert_called_once()
+        self.assertEqual(result, mock_measurements)
 
 
 if __name__ == "__main__":
