@@ -3,7 +3,12 @@ from typing import Annotated, Sequence, Union
 
 from fastapi import APIRouter, Depends, Query
 
-from .dependencies.database import SessionDep, get_measurements, get_measurements_count
+from .dependencies.database import (
+    SessionDep,
+    get_measurement,
+    get_measurements,
+    get_measurements_count,
+)
 from .dto import Info
 from .model import MeasurementPublic
 
@@ -32,3 +37,11 @@ async def levels(
     return get_measurements(
         session, user_id, offset, limit, device_timestamp_from, device_timestamp_to
     )
+
+
+@measurements.get("/levels/{id}")
+async def level(
+    session: SessionDep,
+    id: str,
+) -> MeasurementPublic:
+    return get_measurement(session, id)

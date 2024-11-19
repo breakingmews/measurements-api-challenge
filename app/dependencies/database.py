@@ -69,3 +69,8 @@ def get_measurements(
     query = query.order_by(col(Measurement.device_timestamp).desc())
 
     return session.exec(query).all()
+
+
+def get_measurement(session: SessionDep, id: str) -> Measurement:
+    query = select(Measurement).where(Measurement.id == id)
+    return session.exec(query).one()

@@ -78,6 +78,34 @@ class TestApp(unittest.TestCase):
         self.assertEqual(expected, response.json())
         self.assertNotIn("id", response.json())
 
+    @patch("app.router.get_measurement")
+    def test_level(self, get_measurement_mock):
+        # arrange
+        mock_measurement: Measurement = Measurement(
+            id="1",
+            user_id="test_user",
+            device_id="test_device",
+            device_timestamp=datetime(2021, 2, 13, 0, 6, 0),
+            value=5.5,
+        )
+
+        get_measurement_mock.return_value = mock_measurement
+
+        # act
+        response = self.client.get("/api/v1/levels/1")
+
+        # assert
+        expected = {
+            "device_id": "test_device",
+            "user_id": "test_user",
+            "device_timestamp": "2021-02-13T00:06:00",
+            "value": 5.5,
+        }
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(expected, response.json())
+        self.assertNotIn("id", response.json())
+
 
 if __name__ == "__main__":
     unittest.main()
