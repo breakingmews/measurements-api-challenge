@@ -1,11 +1,10 @@
-## Data
-three sample csv files which contain glucose values for users.
-The naming pattern for the files is: user_id.csv .
+# About
+This project was created as part of a coding challenge. The content has been anonymized to respect confidentiality.
 
-## Task 1
-Create a suitable model
-in the backend to store the glucose values. Also supply means of
-loading the sample data into the model / database.
+
+- improve pagination with fastapi-sqla
+- add sorting to endpoint
+- use alembic for datamigration
 
 ## Task 2
 Implement the following API endpoints which use the model / database:

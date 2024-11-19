@@ -4,7 +4,8 @@ from sqlmodel import Field, SQLModel
 
 
 class Measurement(SQLModel, table=True):
-    serial_number: str = Field(primary_key=True)
-    device_timestamp: datetime = Field(primary_key=True)
+    id: str = Field(primary_key=True)
+    device_id: str = Field()
+    device_timestamp: datetime = Field()
     user_id: str = Field()
-    glucose_value_mgdl: float = Field(default=None)
+    value: float = Field()

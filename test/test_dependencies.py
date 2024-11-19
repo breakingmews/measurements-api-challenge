@@ -18,6 +18,7 @@ class TestCase(unittest.TestCase):
                     "123",
                     "123",
                 ],
+                "id": ["id1", "id2"],
             },
         )
 
@@ -31,6 +32,7 @@ class TestCase(unittest.TestCase):
                     "123",
                     "123",
                 ],
+                "id": ["id3", "id4"],
             }
         )
 
@@ -42,15 +44,16 @@ class TestCase(unittest.TestCase):
         # assert
         expected = pd.DataFrame(
             {
-                "serial_number": ["123", "456", "789", "012"],
+                "device_id": ["123", "456", "789", "012"],
                 "device_timestamp": [
                     "2023-01-01 00:00:00",
                     "2023-01-01 01:00:00",
                     "2023-01-01 02:00:00",
                     "2023-01-01 03:00:00",
                 ],
-                "glucose_value_mgdl": [100, 110, 120, 130],
+                "value": [100, 110, 120, 130],
                 "user_id": ["123", "123", "123", "123"],
+                "id": ["id1", "id2", "id3", "id4"],
             },
             index=[0, 1, 0, 1],
         )
