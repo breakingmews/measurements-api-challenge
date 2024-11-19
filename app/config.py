@@ -1,6 +1,8 @@
 class Settings:
+    sample_data_dir = "data"
+
     db = {
-        "url": "sqlite:///sample-data/sample-data.db",
+        "url": f"sqlite:///{sample_data_dir}/sample.db",
         "connect_args": {"check_same_thread": False},
     }
 
