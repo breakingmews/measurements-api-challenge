@@ -56,8 +56,9 @@ class TestApp(unittest.TestCase):
 
         # act
         response = self.client.get(
-            "/api/v1/levels/test_user",
+            "/api/v1/levels",
             params={
+                "user_id": "test_user",
                 "offset": 0,
                 "limit": 10,
                 "device_timestamp_from": "2021-02-13T00:06:00",

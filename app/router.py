@@ -16,10 +16,10 @@ async def info(dataset_size: int = Depends(get_measurements_count)) -> Info:
     return Info(status="running", dataset_size=dataset_size)
 
 
-@measurements.get("/levels/{user_id}")
+@measurements.get("/levels")
 async def levels(
     session: SessionDep,
-    user_id: str,
+    user_id: Annotated[str, Query(...)],
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 10,
     device_timestamp_from: Union[datetime, None] = Query(
