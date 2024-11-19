@@ -21,7 +21,13 @@ async def levels(
     user_id: str,
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 10,
-    start: Union[datetime, None] = Query(None, example="2021-02-13T00:06:00"),
-    stop: Union[datetime, None] = Query(None, example="2021-02-14T00:06:00"),
+    device_timestamp_from: Union[datetime, None] = Query(
+        None, example="2021-02-13T00:06:00"
+    ),
+    device_timestamp_to: Union[datetime, None] = Query(
+        None, example="2021-02-14T00:06:00"
+    ),
 ) -> Sequence[Measurement]:
-    return get_measurements(session, user_id, offset, limit, start, stop)
+    return get_measurements(
+        session, user_id, offset, limit, device_timestamp_from, device_timestamp_to
+    )

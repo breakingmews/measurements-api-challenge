@@ -53,8 +53,8 @@ def get_measurements(
     user_id: str,
     offset: int,
     limit: int,
-    start: Union[datetime, None] = None,
-    stop: Union[datetime, None] = None,
+    device_timestamp_from: Union[datetime, None] = None,
+    device_timestamp_to: Union[datetime, None] = None,
 ) -> Sequence[Measurement]:
     query = (
         select(Measurement)
@@ -62,10 +62,10 @@ def get_measurements(
         .offset(offset)
         .limit(limit)
     )
-    if start:
-        query = query.where(Measurement.device_timestamp >= start)
-    if stop:
-        query = query.where(Measurement.device_timestamp <= stop)
+    if device_timestamp_from:
+        query = query.where(Measurement.device_timestamp >= device_timestamp_from)
+    if device_timestamp_to:
+        query = query.where(Measurement.device_timestamp <= device_timestamp_to)
     query = query.order_by(col(Measurement.device_timestamp).desc())
 
     return session.exec(query).all()
