@@ -5,9 +5,10 @@ from fastapi import APIRouter, Depends, Query
 
 from .dependencies.database import SessionDep, get_measurements, get_measurements_count
 from .dto import Info
-from .model import Measurement
+from .model import MeasurementPublic
 
 router = APIRouter()
+measurements = APIRouter()
 
 
 @router.get("/info")
@@ -15,7 +16,7 @@ async def info(dataset_size: int = Depends(get_measurements_count)) -> Info:
     return Info(status="running", dataset_size=dataset_size)
 
 
-@router.get("/api/v1/levels/{user_id}")
+@measurements.get("/levels/{user_id}")
 async def levels(
     session: SessionDep,
     user_id: str,
@@ -27,7 +28,7 @@ async def levels(
     device_timestamp_to: Union[datetime, None] = Query(
         None, example="2021-02-14T00:06:00"
     ),
-) -> Sequence[Measurement]:
+) -> Sequence[MeasurementPublic]:
     return get_measurements(
         session, user_id, offset, limit, device_timestamp_from, device_timestamp_to
     )
