@@ -1,3 +1,6 @@
+[![Build and Test](https://github.com/breakingmews/codecrafters-bittorrent-python/actions/workflows/ci.yml/badge.svg)](https://github.com/breakingmews/codecrafters-bittorrent-python/actions/workflows/ci.yml)
+
+
 # About
 This project was created as part of a coding challenge. The content has been anonymized to respect confidentiality.
 
