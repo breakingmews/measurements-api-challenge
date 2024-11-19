@@ -4,6 +4,8 @@ from typing import List
 
 import pandas as pd
 
+from app.config import settings
+
 _log = logging.getLogger(__name__)
 
 
@@ -14,6 +16,9 @@ def read_dataset(dataset_dirpath: str) -> List[pd.DataFrame]:
     for filename in dataset_dir.iterdir():
         if filename.suffix == ".csv":
             data: pd.DataFrame = pd.read_csv(filename, skiprows=1)
+            data["Gerätezeitstempel"] = pd.to_datetime(
+                data["Gerätezeitstempel"], format="mixed", errors="raise"
+            )
             data["user_id"] = filename.stem
             dataset.append(data)
     return dataset
@@ -35,9 +40,7 @@ def prepare_dataset(dataset: List[pd.DataFrame]) -> pd.DataFrame:
 
 def load_dataset() -> pd.DataFrame:
     _log.info("Loading dataset")
-    sample_data_dir = "sample-data"
-
-    dataset = read_dataset(sample_data_dir)
+    dataset = read_dataset(settings.sample_data_dir)
     dataset = prepare_dataset(dataset)
     _log.info(f"Loaded dataset with {len(dataset)} records")
     return dataset

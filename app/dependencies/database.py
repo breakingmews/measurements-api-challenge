@@ -1,9 +1,10 @@
 import logging
-from typing import Annotated, Sequence
+from datetime import datetime
+from typing import Annotated, Sequence, Union
 
 import pandas as pd
 from fastapi import Depends
-from sqlmodel import Session, SQLModel, create_engine, func, select
+from sqlmodel import Session, SQLModel, col, create_engine, func, select
 
 from app.config import settings
 from app.dependencies.dataset import load_dataset
@@ -48,11 +49,23 @@ def get_measurements_count(session: SessionDep):
 
 
 def get_measurements(
-    user_id: str, offset: int, limit: int, session: SessionDep
+    session: SessionDep,
+    user_id: str,
+    offset: int,
+    limit: int,
+    start: Union[datetime, None] = None,
+    stop: Union[datetime, None] = None,
 ) -> Sequence[Measurement]:
-    return session.exec(
+    query = (
         select(Measurement)
         .where(Measurement.user_id == user_id)
         .offset(offset)
         .limit(limit)
-    ).all()
+    )
+    if start:
+        query = query.where(Measurement.device_timestamp >= start)
+    if stop:
+        query = query.where(Measurement.device_timestamp <= stop)
+    query = query.order_by(col(Measurement.device_timestamp).desc())
+
+    return session.exec(query).all()

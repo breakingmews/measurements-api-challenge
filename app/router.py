@@ -1,4 +1,5 @@
-from typing import Annotated, Sequence
+from datetime import datetime
+from typing import Annotated, Sequence, Union
 
 from fastapi import APIRouter, Depends, Query
 
@@ -19,8 +20,8 @@ async def levels(
     session: SessionDep,
     user_id: str,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 100,
-    # start: Union[str, None] = None,
-    # stop: Union[str, None] = None,
+    limit: Annotated[int, Query(le=100)] = 10,
+    start: Union[datetime, None] = Query(None, example="2021-02-13T00:06:00"),
+    stop: Union[datetime, None] = Query(None, example="2021-02-14T00:06:00"),
 ) -> Sequence[Measurement]:
-    return get_measurements(user_id, offset, limit, session)
+    return get_measurements(session, user_id, offset, limit, start, stop)

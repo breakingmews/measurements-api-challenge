@@ -60,7 +60,7 @@ class TestDatabase(unittest.TestCase):
         mock_session.exec.return_value.all.return_value = mock_measurements
 
         # act
-        result = get_measurements(user_id, offset, limit, mock_session)
+        result = get_measurements(mock_session, user_id, offset, limit)
 
         # assert
         mock_session.exec.assert_called_once()
