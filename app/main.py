@@ -5,10 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from .config import settings
-from .dependencies.database import (
-    create_db_and_tables,
-    import_dataset,
-)
+from .dependencies.database import create_db_and_tables, engine, import_dataset
 from .router import measurements, router
 
 logging.config.dictConfig(settings.logging)  # type: ignore[arg-type]
@@ -19,6 +16,7 @@ _log = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     _log.info("Application startup")
 
+    engine.connect()
     create_db_and_tables()
     import_dataset()
 
