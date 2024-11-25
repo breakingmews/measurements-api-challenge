@@ -25,39 +25,21 @@ def read_dataset(dataset_dirpath: str) -> List[pd.DataFrame]:
     dataset: List[pd.DataFrame] = []
     for filename in dataset_dir.iterdir():
         if filename.suffix == ".csv":
-            data: pd.DataFrame = pd.read_csv(filename, skiprows=1)
-            data["Gerätezeitstempel"] = pd.to_datetime(
-                data["Gerätezeitstempel"], format="mixed", errors="raise"
+            data: pd.DataFrame = pd.read_csv(filename, dtype={"user_id": str})
+            data["device_timestamp"] = pd.to_datetime(
+                data["device_timestamp"], format="mixed", errors="raise"
             )
-            data["user_id"] = (
-                filename.stem
-            )  # The naming pattern for the files is: user_id.csv.
             data["id"] = data.apply(
-                lambda x: generate_unique_id(x["Seriennummer"], x["Gerätezeitstempel"]),
+                lambda x: generate_unique_id(x["device_id"], x["device_timestamp"]),
                 axis=1,
             )
             dataset.append(data)
     return dataset
 
 
-def prepare_dataset(dataset: List[pd.DataFrame]) -> pd.DataFrame:
-    ds = pd.concat(dataset)
-    column_mapping = {
-        "Seriennummer": "device_id",
-        "Gerätezeitstempel": "device_timestamp",
-        "Glukosewert-Verlauf mg/dL": "value",
-        "user_id": "user_id",
-        "id": "id",
-    }
-    ds = ds[list(column_mapping.keys())]
-    ds = ds.rename(columns=column_mapping)
-    ds = ds[ds["value"].notna()]
-    return ds
-
-
 def load_dataset() -> pd.DataFrame:
     _log.info("Loading dataset")
     dataset = read_dataset(settings.sample_data_dir)
-    dataset = prepare_dataset(dataset)
+    df = pd.concat(dataset)
     _log.info(f"Loaded dataset with {len(dataset)} records")
-    return dataset
+    return df

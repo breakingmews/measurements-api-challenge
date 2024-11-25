@@ -17,4 +17,3 @@ user_id , filter by start and stop timestamps (optional). This endpoint
 should support pagination, sorting, and a way to limit the number of
 glucose levels returned.
 
-- /api/v1/levels/<id>/ : Retrieve ( GET ) a particular glucose level by id .
