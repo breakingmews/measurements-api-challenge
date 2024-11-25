@@ -1,9 +1,11 @@
 from datetime import datetime
 from typing import Annotated, Optional, Sequence, Union
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Query
 
-from .dependencies.service import MeasurementService, get_measurement_service
+from .dependencies.service import (
+    MeasurementServiceDep,
+)
 from .dto import Info
 from .model import MeasurementPublic
 
@@ -13,7 +15,7 @@ measurements = APIRouter()
 
 @router.get("/info")
 async def info(
-    service: MeasurementService = Depends(get_measurement_service),
+    service: MeasurementServiceDep,
 ) -> Info:
     dataset_size = await service.get_measurements_count()
     return Info(status="running", dataset_size=dataset_size)
@@ -21,6 +23,7 @@ async def info(
 
 @measurements.get("/levels")
 async def levels(
+    service: MeasurementServiceDep,
     user_id: Annotated[str, Query(...)],
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 10,
@@ -30,7 +33,6 @@ async def levels(
     device_timestamp_to: Union[datetime, None] = Query(
         None, example="2021-02-14T00:06:00"
     ),
-    service: MeasurementService = Depends(get_measurement_service),
 ) -> Sequence[MeasurementPublic]:
     return await service.get_measurements(
         user_id, offset, limit, device_timestamp_from, device_timestamp_to
@@ -39,7 +41,7 @@ async def levels(
 
 @measurements.get("/levels/{id}")
 async def level(
+    service: MeasurementServiceDep,
     id: str,
-    service: MeasurementService = Depends(get_measurement_service),
 ) -> Optional[MeasurementPublic]:
     return await service.get_measurement(id)
