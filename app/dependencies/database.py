@@ -25,7 +25,6 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
-    _log.info("Created database and tables")
 
 
 def import_dataset():
