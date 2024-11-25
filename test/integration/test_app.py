@@ -15,10 +15,10 @@ class TestApp(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("running", response.json()["status"])
 
-    def test_get_levels(self):
+    def test_get_measurements(self):
         # act
         with TestClient(app) as client:
-            response = client.get("/api/v1/levels?user_id=01&limit=5")
+            response = client.get("/api/v1/measurements?user_id=01&limit=5")
 
         # assert
         self.assertEqual(200, response.status_code)

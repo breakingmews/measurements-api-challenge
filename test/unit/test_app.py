@@ -38,7 +38,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.json(), expected)
 
     @patch("app.dependencies.service.MeasurementService.get_measurements")
-    def test_levels(self, get_measurements_mock):
+    def test_get_measurements(self, get_measurements_mock):
         # arrange
         mock_measurements: Sequence[Measurement] = [
             Measurement(
@@ -54,7 +54,7 @@ class TestApp(unittest.TestCase):
 
         # act
         response = self.client.get(
-            "/api/v1/levels",
+            "/api/v1/measurements",
             params={
                 "user_id": "test_user",
                 "offset": 0,
@@ -77,7 +77,7 @@ class TestApp(unittest.TestCase):
         self.assertNotIn("id", response.json())
 
     @patch("app.dependencies.service.MeasurementService.get_measurement")
-    def test_level(self, mock_get_measurement):
+    def test_get_measurement(self, mock_get_measurement):
         # arrange
         mock_measurement: Measurement = Measurement(
             id="1",
@@ -90,7 +90,7 @@ class TestApp(unittest.TestCase):
         mock_get_measurement.return_value = mock_measurement
 
         # act
-        response = self.client.get("/api/v1/levels/1")
+        response = self.client.get("/api/v1/measurements/1")
 
         # assert
         expected = {
@@ -103,6 +103,38 @@ class TestApp(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected, response.json())
         self.assertNotIn("id", response.json())
+
+    @patch("app.dependencies.service.MeasurementService.get_measurement")
+    def test_measurement_not_found(self, mock_get_measurement):
+        # arrange
+        mock_get_measurement.return_value = None
+
+        # act
+        response = self.client.get("/api/v1/measurements/1")
+
+        # assert
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(response.json()["message"], "Not found")
+
+    @patch("app.dependencies.service.MeasurementService.get_measurements")
+    def test_measurements_not_found(self, get_measurements_mock):
+        # arrange
+        get_measurements_mock.return_value = None
+
+        # act
+        response = self.client.get(
+            "/api/v1/measurements",
+            params={
+                "user_id": "test_user",
+                "offset": 0,
+                "limit": 10,
+                "device_timestamp_from": "2021-02-13T00:06:00",
+            },
+        )
+
+        # assert
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(response.json()["message"], "Not found")
 
 
 if __name__ == "__main__":

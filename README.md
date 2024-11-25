@@ -12,8 +12,7 @@ This project was created as part of a coding challenge. The content has been ano
 ## Task 2
 Implement the following API endpoints which use the model / database:
 
-- /api/v1/levels/ : Retrieve ( GET ) a list of glucose levels for a given
+- /api/v1/measurements/ : Retrieve ( GET ) a list of measurements for a given
 user_id , filter by start and stop timestamps (optional). This endpoint
-should support pagination, sorting, and a way to limit the number of
-glucose levels returned.
+should support pagination, sorting, and a way to limit the number of measurements returned.
 

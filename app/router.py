@@ -1,12 +1,13 @@
 from datetime import datetime
-from typing import Annotated, Optional, Sequence, Union
+from typing import Annotated, Sequence, Union
 
 from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
 
 from .dependencies.service import (
     MeasurementServiceDep,
 )
-from .dto import Info
+from .dto import Info, Message
 from .model import MeasurementPublic
 
 router = APIRouter()
@@ -21,8 +22,12 @@ async def info(
     return Info(status="running", dataset_size=dataset_size)
 
 
-@measurements.get("/levels")
-async def levels(
+@measurements.get(
+    "/measurements",
+    response_model=Sequence[MeasurementPublic],
+    responses={404: {"model": Message}},
+)
+async def get_measurements(
     service: MeasurementServiceDep,
     user_id: Annotated[str, Query(...)],
     offset: int = 0,
@@ -33,15 +38,25 @@ async def levels(
     device_timestamp_to: Union[datetime, None] = Query(
         None, example="2021-02-14T00:06:00"
     ),
-) -> Sequence[MeasurementPublic]:
-    return await service.get_measurements(
+):
+    measurements = await service.get_measurements(
         user_id, offset, limit, device_timestamp_from, device_timestamp_to
     )
+    if measurements:
+        return measurements
+    return JSONResponse(status_code=404, content={"message": "Not found"})
 
 
-@measurements.get("/levels/{id}")
-async def level(
+@measurements.get(
+    "/measurements/{id}",
+    response_model=MeasurementPublic,
+    responses={404: {"model": Message}},
+)
+async def get_measurement(
     service: MeasurementServiceDep,
     id: str,
-) -> Optional[MeasurementPublic]:
-    return await service.get_measurement(id)
+):
+    measurement = await service.get_measurement(id)
+    if measurement:
+        return measurement
+    return JSONResponse(status_code=404, content={"message": "Not found"})
