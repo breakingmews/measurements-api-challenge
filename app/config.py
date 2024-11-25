@@ -24,9 +24,6 @@ class Settings:
                     "CRITICAL": "bold_red",
                 },
             },
-            "simple": {
-                "format": "%(levelname)s - %(message)s",
-            },
         },
         "handlers": {
             "console": {
@@ -34,37 +31,28 @@ class Settings:
                 "formatter": "detailed",
                 "level": "DEBUG",
             },
-            "file_info": {
-                "class": "logging.FileHandler",
-                "filename": "logs/info.log",
+            "file": {
+                "class": "logging.handlers.TimedRotatingFileHandler",
+                "when": "midnight",
+                "interval": 1,
+                "backupCount": 7,
+                "filename": "logs/log",
                 "formatter": "standard",
                 "level": "INFO",
-            },
-            "file_debug": {
-                "class": "logging.FileHandler",
-                "filename": "logs/debug.log",
-                "formatter": "detailed",
-                "level": "DEBUG",
-            },
-            "file_error": {
-                "class": "logging.FileHandler",
-                "filename": "logs/error.log",
-                "formatter": "detailed",
-                "level": "ERROR",
             },
         },
         "loggers": {
             "": {  # root logger
-                "handlers": ["console", "file_debug"],
+                "handlers": ["console", "file"],
                 "level": "DEBUG",
             },
             "uvicorn": {
-                "handlers": ["console", "file_debug"],
+                "handlers": ["console", "file"],
                 "level": "INFO",
                 "propagate": False,
             },
             "watchfiles.main": {
-                "handlers": ["console", "file_error"],
+                "handlers": ["console"],
                 "level": "ERROR",
                 "propagate": False,
             },
