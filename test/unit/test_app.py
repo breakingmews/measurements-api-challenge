@@ -5,7 +5,6 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from app.dependencies.database import get_measurements_count
 from app.main import app
 from app.model import Measurement
 
@@ -25,9 +24,10 @@ class TestApp(unittest.TestCase):
         mock_create_db.assert_called_once()
         mock_import_dataset.assert_called_once()
 
-    def test_info_endpoint(self):
+    @patch("app.dependencies.service.MeasurementService.get_measurements_count")
+    def test_info_endpoint(self, get_measurements_count_mock):
         # arrange
-        app.dependency_overrides[get_measurements_count] = lambda: 10
+        get_measurements_count_mock.return_value = 10
         expected = {"status": "running", "dataset_size": 10}
 
         # act
@@ -37,7 +37,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(response.json(), expected)
 
-    @patch("app.router.get_measurements")
+    @patch("app.dependencies.service.MeasurementService.get_measurements")
     def test_levels(self, get_measurements_mock):
         # arrange
         mock_measurements: Sequence[Measurement] = [
@@ -76,8 +76,8 @@ class TestApp(unittest.TestCase):
         self.assertEqual(expected, response.json())
         self.assertNotIn("id", response.json())
 
-    @patch("app.router.get_measurement")
-    def test_level(self, get_measurement_mock):
+    @patch("app.dependencies.service.MeasurementService.get_measurement")
+    def test_level(self, mock_get_measurement):
         # arrange
         mock_measurement: Measurement = Measurement(
             id="1",
@@ -87,7 +87,7 @@ class TestApp(unittest.TestCase):
             value=5.5,
         )
 
-        get_measurement_mock.return_value = mock_measurement
+        mock_get_measurement.return_value = mock_measurement
 
         # act
         response = self.client.get("/api/v1/levels/1")

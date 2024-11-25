@@ -1,10 +1,9 @@
 import logging
-from datetime import datetime
-from typing import Annotated, Sequence, Union
+from typing import Annotated
 
 import pandas as pd
 from fastapi import Depends
-from sqlmodel import Session, SQLModel, col, create_engine, func, select
+from sqlmodel import Session, SQLModel, create_engine, func, select
 
 from app.config import settings
 from app.dependencies.dataset import load_dataset
@@ -45,31 +44,3 @@ def import_dataset():
 
 def get_measurements_count(session: SessionDep):
     return session.scalar(select(func.count()).select_from(Measurement)) or 0
-
-
-def get_measurements(
-    session: SessionDep,
-    user_id: str,
-    offset: int,
-    limit: int,
-    device_timestamp_from: Union[datetime, None] = None,
-    device_timestamp_to: Union[datetime, None] = None,
-) -> Sequence[Measurement]:
-    query = (
-        select(Measurement)
-        .where(Measurement.user_id == user_id)
-        .offset(offset)
-        .limit(limit)
-    )
-    if device_timestamp_from:
-        query = query.where(Measurement.device_timestamp >= device_timestamp_from)
-    if device_timestamp_to:
-        query = query.where(Measurement.device_timestamp <= device_timestamp_to)
-    query = query.order_by(col(Measurement.device_timestamp).desc())
-
-    return session.exec(query).all()
-
-
-def get_measurement(session: SessionDep, id: str) -> Measurement:
-    query = select(Measurement).where(Measurement.id == id)
-    return session.exec(query).one()
