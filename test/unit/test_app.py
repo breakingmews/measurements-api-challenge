@@ -5,9 +5,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from app.dependencies.database import (
-    get_measurements_count,
-)
+from app.dependencies.database import get_measurements_count
 from app.main import app
 from app.model import Measurement
 
