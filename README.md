@@ -49,6 +49,13 @@ docker run -d \
   measurements-api
 ```
 
+#### Run with Docker Compose
+
+Build and start the services:
+```sh
+docker-compose up --build
+```
+
 ### Logging
 Logs are stored in the `/code/logs` directory inside the container. You can mount a host directory to this path to persist logs.
 
