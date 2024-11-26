@@ -24,7 +24,8 @@ ruff = "*"
 yamllint = "*"
 
 [scripts]
-start = "fastapi dev"
+start = "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+serve = "uvicorn app.main:app --host 0.0.0.0 --port 8000"
 test = "coverage run -m unittest discover -v"
 test-coverage = "coverage report --fail-under=83"
 pre-commit-format = "ruff format --check"
