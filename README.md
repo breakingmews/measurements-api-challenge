@@ -58,17 +58,3 @@ docker-compose up --build
 
 ### Logging
 Logs are stored in the `/code/logs` directory inside the container. You can mount a host directory to this path to persist logs.
-
-# TODOs
-
-- improve pagination with fastapi-sqla
-- add sorting to endpoint
-- use alembic for datamigration
-
-## Task 2
-Implement the following API endpoints which use the model / database:
-
-- /api/v1/measurements/ : Retrieve ( GET ) a list of measurements for a given
-user_id , filter by start and stop timestamps (optional). This endpoint
-should support pagination, sorting, and a way to limit the number of measurements returned.
-
