@@ -64,14 +64,16 @@ class TestApp(unittest.TestCase):
         )
 
         # assert
-        expected = [
-            {
-                "device_id": "test_device",
-                "user_id": "test_user",
-                "device_timestamp": "2021-02-13T00:06:00",
-                "value": 5.5,
-            }
-        ]
+        expected = {
+            "measurements": [
+                {
+                    "device_id": "test_device",
+                    "user_id": "test_user",
+                    "device_timestamp": "2021-02-13T00:06:00",
+                    "value": 5.5,
+                }
+            ]
+        }
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected, response.json())
         self.assertNotIn("id", response.json())
@@ -105,7 +107,7 @@ class TestApp(unittest.TestCase):
         self.assertNotIn("id", response.json())
 
     @patch("app.dependencies.service.MeasurementService.get_measurement")
-    def test_measurement_not_found(self, mock_get_measurement):
+    def test_get_measurement_not_found(self, mock_get_measurement):
         # arrange
         mock_get_measurement.return_value = None
 
@@ -117,9 +119,9 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.json()["message"], "Not found")
 
     @patch("app.dependencies.service.MeasurementService.get_measurements")
-    def test_measurements_not_found(self, get_measurements_mock):
+    def test_get_measurements_not_found(self, get_measurements_mock):
         # arrange
-        get_measurements_mock.return_value = None
+        get_measurements_mock.return_value = []
 
         # act
         response = self.client.get(
@@ -133,8 +135,8 @@ class TestApp(unittest.TestCase):
         )
 
         # assert
-        self.assertEqual(404, response.status_code)
-        self.assertEqual(response.json()["message"], "Not found")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.json()["measurements"], [])
 
 
 if __name__ == "__main__":

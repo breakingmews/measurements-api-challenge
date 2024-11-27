@@ -22,4 +22,4 @@ class TestApp(unittest.TestCase):
 
         # assert
         self.assertEqual(200, response.status_code)
-        self.assertEqual(5, len(response.json()))
+        self.assertEqual(5, len(response.json()["measurements"]))

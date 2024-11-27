@@ -1,4 +1,8 @@
+from typing import Sequence
+
 from pydantic import BaseModel
+
+from app.model import MeasurementPublic
 
 
 class Info(BaseModel):
@@ -8,3 +12,7 @@ class Info(BaseModel):
 
 class Message(BaseModel):
     message: str
+
+
+class MeasurementsResponse(BaseModel):
+    measurements: Sequence[MeasurementPublic]

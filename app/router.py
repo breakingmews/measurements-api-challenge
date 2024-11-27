@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Sequence, Union
+from typing import Annotated, Union
 
 from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from .dependencies.service import (
     MeasurementServiceDep,
 )
-from .dto import Info, Message
+from .dto import Info, MeasurementsResponse, Message
 from .model import MeasurementPublic
 
 router = APIRouter()
@@ -24,8 +24,7 @@ async def info(
 
 @measurements.get(
     "/measurements",
-    response_model=Sequence[MeasurementPublic],
-    responses={404: {"model": Message}},
+    response_model=MeasurementsResponse,
 )
 async def get_measurements(
     service: MeasurementServiceDep,
@@ -42,9 +41,7 @@ async def get_measurements(
     measurements = await service.get_measurements(
         user_id, offset, limit, device_timestamp_from, device_timestamp_to
     )
-    if measurements:
-        return measurements
-    return JSONResponse(status_code=404, content={"message": "Not found"})
+    return MeasurementsResponse(measurements=measurements)
 
 
 @measurements.get(
