@@ -23,7 +23,7 @@ Retrieve a list of measurements for a given user_id, optionally filtered by star
 
 ### Prerequisites
 
-- Python 3.13
+- Python 3.12
 - Pipenv
 - Docker (optional, for running in a container)
 
