@@ -3,9 +3,21 @@
 
 # Measurements API
 
-This project provides an API for managing and retrieving measurements.
+This project provides an API for retrieving measurements.
 
 This project was created as part of a coding challenge. The content has been anonymized to respect confidentiality.
+
+## Endpoints
+### Get info and health status
+`GET /api/v1/info`
+
+### Get Measurements 
+`GET /api/v1/measurements`: 
+Retrieve a list of measurements for a given user_id, optionally filtered by start and stop timestamps: supports pagination.
+
+### Get Measurement by ID
+`GET /api/v1/measurements/{id}`: Retrieve a specific measurement by its ID.
+
 
 ## Getting Started
 
